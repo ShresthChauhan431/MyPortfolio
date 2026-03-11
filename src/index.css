@@ -1,0 +1,343 @@
+@import "tailwindcss";
+@import "./styles/cinema.css";
+
+/* ═══════════════════════════════════════════════════════════════
+   EDIT-MODE SYSTEM — glass-morphism styles
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── CSS Custom Properties ─────────────────────────────────── */
+:root {
+    --edit-glass-bg: rgba(12, 12, 20, 0.72);
+    --edit-glass-border: rgba(255, 255, 255, 0.08);
+    --edit-glass-blur: 18px;
+    --edit-accent: #6d5dfc;
+    --edit-accent-glow: rgba(109, 93, 252, 0.35);
+    --edit-danger: #f43f5e;
+    --edit-danger-glow: rgba(244, 63, 94, 0.3);
+    --edit-text: #e2e0ff;
+    --edit-text-dim: rgba(226, 224, 255, 0.55);
+    --edit-radius: 12px;
+    --edit-radius-sm: 8px;
+    --edit-transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Floating Action Button (bottom-right pencil / close) ──── */
+.edit-fab {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    z-index: 10000;
+    width: 56px;
+    height: 56px;
+    border: 1px solid var(--edit-glass-border);
+    border-radius: 50%;
+    background: var(--edit-glass-bg);
+    backdrop-filter: blur(var(--edit-glass-blur));
+    -webkit-backdrop-filter: blur(var(--edit-glass-blur));
+    color: var(--edit-text);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow:
+        0 4px 24px rgba(0, 0, 0, 0.4),
+        0 0 0 0 var(--edit-accent-glow);
+    transition:
+        box-shadow var(--edit-transition),
+        background var(--edit-transition),
+        border-color var(--edit-transition),
+        transform var(--edit-transition);
+    outline: none;
+}
+
+.edit-fab:hover {
+    background: rgba(20, 18, 38, 0.85);
+    border-color: rgba(255, 255, 255, 0.14);
+    box-shadow:
+        0 6px 32px rgba(0, 0, 0, 0.5),
+        0 0 0 3px var(--edit-accent-glow);
+    transform: scale(1.06);
+}
+
+.edit-fab:active {
+    transform: scale(0.96);
+}
+
+.edit-fab--active {
+    background: var(--edit-accent);
+    border-color: rgba(255, 255, 255, 0.18);
+    box-shadow:
+        0 4px 24px rgba(0, 0, 0, 0.4),
+        0 0 20px var(--edit-accent-glow);
+}
+
+.edit-fab--active:hover {
+    background: #7b6dfc;
+    box-shadow:
+        0 6px 32px rgba(0, 0, 0, 0.5),
+        0 0 28px var(--edit-accent-glow);
+}
+
+/* Icon rotation on toggle */
+.edit-fab__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.edit-fab__icon--close {
+    transform: rotate(90deg);
+}
+
+/* ── Floating Toolbar (top-center, edit mode only) ─────────── */
+.edit-toolbar {
+    position: fixed;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-72px);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 16px;
+    border-radius: var(--edit-radius);
+    border: 1px solid var(--edit-glass-border);
+    background: var(--edit-glass-bg);
+    backdrop-filter: blur(var(--edit-glass-blur));
+    -webkit-backdrop-filter: blur(var(--edit-glass-blur));
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.45),
+        inset 0 0.5px 0 rgba(255, 255, 255, 0.06);
+    opacity: 0;
+    pointer-events: none;
+    transition:
+        transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+        opacity 0.3s ease;
+}
+
+.edit-toolbar--visible {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Status indicator: pulsing dot + label */
+.edit-toolbar__status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.edit-toolbar__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--edit-accent);
+    box-shadow: 0 0 8px var(--edit-accent-glow);
+    animation: edit-dot-pulse 2s ease-in-out infinite;
+}
+
+@keyframes edit-dot-pulse {
+    0%,
+    100% {
+        box-shadow: 0 0 6px var(--edit-accent-glow);
+        opacity: 1;
+    }
+    50% {
+        box-shadow: 0 0 16px var(--edit-accent-glow);
+        opacity: 0.7;
+    }
+}
+
+.edit-toolbar__label {
+    font-family: ui-monospace, "Cascadia Code", "Fira Code", monospace;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--edit-text);
+    white-space: nowrap;
+    user-select: none;
+}
+
+/* Divider between status and buttons */
+.edit-toolbar__divider {
+    width: 1px;
+    height: 24px;
+    background: rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
+}
+
+/* Toolbar buttons */
+.edit-toolbar__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: var(--edit-radius-sm);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--edit-text);
+    font-family: ui-monospace, "Cascadia Code", "Fira Code", monospace;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition:
+        background var(--edit-transition),
+        border-color var(--edit-transition),
+        box-shadow var(--edit-transition);
+    outline: none;
+}
+
+.edit-toolbar__btn:hover {
+    background: rgba(255, 255, 255, 0.09);
+    border-color: rgba(255, 255, 255, 0.14);
+    box-shadow: 0 0 12px rgba(109, 93, 252, 0.15);
+}
+
+.edit-toolbar__btn:active {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.edit-toolbar__btn--danger:hover {
+    border-color: rgba(244, 63, 94, 0.35);
+    color: var(--edit-danger);
+    box-shadow: 0 0 12px var(--edit-danger-glow);
+}
+
+/* ── Editable Text Highlight ───────────────────────────────── */
+.editable-text {
+    /* No visual change by default — keep layout exactly the same */
+    transition:
+        box-shadow var(--edit-transition),
+        background var(--edit-transition),
+        border-color var(--edit-transition);
+}
+
+.editable-text--active {
+    cursor: pointer;
+    border-radius: 3px;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+    /* Subtle underline + very light highlight */
+    background: rgba(109, 93, 252, 0.06);
+    box-shadow: inset 0 -1.5px 0 rgba(109, 93, 252, 0.4);
+}
+
+.editable-text--active:hover {
+    background: rgba(109, 93, 252, 0.12);
+    box-shadow: inset 0 -1.5px 0 rgba(109, 93, 252, 0.7);
+}
+
+.editable-text--editing {
+    background: rgba(109, 93, 252, 0.18);
+    box-shadow:
+        inset 0 -2px 0 var(--edit-accent),
+        0 0 8px var(--edit-accent-glow);
+}
+
+/* ── Inline Edit Popover ───────────────────────────────────── */
+.edit-popover {
+    width: 320px;
+    max-width: calc(100vw - 32px);
+    border-radius: var(--edit-radius);
+    border: 1px solid var(--edit-glass-border);
+    background: var(--edit-glass-bg);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    box-shadow:
+        0 16px 48px rgba(0, 0, 0, 0.55),
+        0 0 0 1px rgba(255, 255, 255, 0.04),
+        inset 0 0.5px 0 rgba(255, 255, 255, 0.06);
+    padding: 0;
+    overflow: hidden;
+    animation: edit-popover-in 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes edit-popover-in {
+    from {
+        opacity: 0;
+        transform: translateY(-6px) scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.edit-popover__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.edit-popover__path {
+    font-family: ui-monospace, "Cascadia Code", "Fira Code", monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: var(--edit-text-dim);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.edit-popover__close {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--edit-text-dim);
+    cursor: pointer;
+    font-size: 13px;
+    line-height: 1;
+    flex-shrink: 0;
+    transition:
+        background var(--edit-transition),
+        color var(--edit-transition);
+}
+
+.edit-popover__close:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--edit-text);
+}
+
+/* Shared input / textarea styles */
+.edit-popover__input,
+.edit-popover__textarea {
+    display: block;
+    width: 100%;
+    padding: 10px 12px;
+    border: none;
+    border-radius: 0;
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--edit-text);
+    font-family: ui-monospace, "Cascadia Code", "Fira Code", monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    outline: none;
+    resize: none;
+    transition: background var(--edit-transition);
+    box-sizing: border-box;
+}
+
+.edit-popover__input::placeholder,
+.edit-popover__textarea::placeholder {
+    color: var(--edit-text-dim);
+}
+
+.edit-popover__input:focus,
+.edit-popover__textarea:focus {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.edit-popover__textarea {
+    min-height: 88px;
+}

@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/svg+xml" href="/MyPortfolio/vite.svg" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="theme-color" content="#050508" />
+        <meta
+            name="description"
+            content="A cinematic personal portfolio built with React, GSAP & passion"
+        />
+
+        <!-- Open Graph -->
+        <meta
+            property="og:title"
+            content="Portfolio — Cinematic Developer Showcase"
+        />
+        <meta
+            property="og:description"
+            content="A cinematic personal portfolio built with React, GSAP & passion"
+        />
+        <meta property="og:type" content="website" />
+        <meta
+            property="og:url"
+            content="https://ShresthChauhan431.github.io/MyPortfolio/"
+        />
+
+        <!-- Twitter Card -->
+        <meta name="twitter:card" content="summary" />
+        <meta
+            name="twitter:title"
+            content="Portfolio — Cinematic Developer Showcase"
+        />
+        <meta
+            name="twitter:description"
+            content="A cinematic personal portfolio built with React, GSAP & passion"
+        />
+
+        <title>Portfolio</title>
+
+        <!-- Google Fonts: Cormorant Garamond (display) + DM Sans (body) -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap"
+            rel="stylesheet"
+        />
+
+        <!-- SPA redirect handler for GitHub Pages -->
+        <!-- Works with public/404.html to preserve deep-link paths -->
+        <script>
+            (function () {
+                var redirect = sessionStorage.redirect;
+                delete sessionStorage.redirect;
+                if (redirect && redirect !== location.href) {
+                    history.replaceState(null, null, redirect);
+                }
+            })();
+        </script>
+    </head>
+    <body>
+        <noscript>
+            <div
+                style="
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    min-height: 100vh;
+                    background: #050508;
+                    color: #6b6b7a;
+                    font-family: sans-serif;
+                    text-align: center;
+                    padding: 2rem;
+                "
+            >
+                <p>
+                    JavaScript is required to view this portfolio. Please enable
+                    it in your browser settings.
+                </p>
+            </div>
+        </noscript>
+        <div id="root"></div>
+        <script type="module" src="/src/main.jsx"></script>
+    </body>
+</html>

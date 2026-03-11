@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Redirecting…</title>
+        <script>
+            // Single-page app redirect for GitHub Pages.
+            // When GitHub Pages serves a 404 for a deep link (e.g. /MyPortfolio/about),
+            // this script stores the current URL in sessionStorage and redirects to
+            // index.html. The script in index.html then restores the URL via
+            // history.replaceState so the React app can handle it.
+            //
+            // Based on: https://github.com/rafgraph/spa-github-pages
+            var pathSegmentsToKeep = 1; // Keep '/MyPortfolio' (the repo name segment)
+
+            var l = window.location;
+            var redirectUrl =
+                l.protocol +
+                "//" +
+                l.hostname +
+                (l.port ? ":" + l.port : "") +
+                l.pathname
+                    .split("/")
+                    .slice(0, 1 + pathSegmentsToKeep)
+                    .join("/") +
+                "/";
+
+            // Store the full original URL so index.html can restore it
+            sessionStorage.redirect = l.href;
+
+            l.replace(redirectUrl);
+        </script>
+    </head>
+    <body>
+        <!-- This page only exists for the redirect script above. -->
+    </body>
+</html>

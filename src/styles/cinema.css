@@ -1,0 +1,431 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   CINEMA.CSS — Cinematic Visual Design System
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── 1. Design Tokens (CSS Custom Properties) ─────────────────────────── */
+
+:root {
+    /* Backgrounds */
+    --bg-deep: #050508;
+    --bg-mid: #0d0d14;
+    --bg-surface: #111118;
+
+    /* Accent — warm gold */
+    --accent: #c8a96e;
+    --accent-glow: rgba(200, 169, 110, 0.15);
+    --accent-strong: rgba(200, 169, 110, 0.35);
+    --accent-muted: rgba(200, 169, 110, 0.08);
+
+    /* Typography colors */
+    --text-primary: #f0ede8;
+    --text-muted: #6b6b7a;
+    --text-dim: #3e3e4a;
+
+    /* Fonts */
+    --font-display: "Cormorant Garamond", serif;
+    --font-body: "DM Sans", sans-serif;
+
+    /* Spacing */
+    --section-px: 8vw;
+    --section-py: 10vh;
+
+    /* Transitions */
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+    --duration-slow: 0.8s;
+    --duration-base: 0.5s;
+    --duration-fast: 0.25s;
+
+    /* Borders */
+    --border-subtle: rgba(255, 255, 255, 0.05);
+    --border-hover: rgba(255, 255, 255, 0.1);
+}
+
+/* ── 2. Smooth Scroll & Base Reset ────────────────────────────────────── */
+
+html {
+    scroll-behavior: smooth;
+}
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-deep);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+}
+
+/* ── 3. Custom Scrollbar (dark & thin) ────────────────────────────────── */
+
+/* Webkit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-deep);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(200, 169, 110, 0.2);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(200, 169, 110, 0.35);
+}
+
+/* Firefox */
+html {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(200, 169, 110, 0.2) var(--bg-deep);
+}
+
+/* ── 4. Typography ────────────────────────────────────────────────────── */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    line-height: 1.15;
+    color: var(--text-primary);
+}
+
+p {
+    font-family: var(--font-body);
+    color: var(--text-muted);
+    line-height: 1.75;
+}
+
+a {
+    color: var(--accent);
+    text-decoration: none;
+    transition: color var(--duration-fast) ease;
+}
+
+a:hover {
+    color: var(--text-primary);
+}
+
+::selection {
+    background: rgba(200, 169, 110, 0.25);
+    color: var(--text-primary);
+}
+
+/* ── 5. Reusable .section Class ───────────────────────────────────────── */
+
+.section {
+    position: relative;
+    min-height: 100vh;
+    padding: var(--section-py) var(--section-px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Subtle top border between sections */
+.section + .section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: var(--section-px);
+    right: var(--section-px);
+    height: 1px;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        var(--border-subtle) 20%,
+        rgba(200, 169, 110, 0.06) 50%,
+        var(--border-subtle) 80%,
+        transparent 100%
+    );
+}
+
+/* Section label — small accent uppercase text used for headings */
+.section__label {
+    font-family: var(--font-body);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 3rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.section__label::before {
+    content: "";
+    display: inline-block;
+    width: 2rem;
+    height: 1px;
+    background: var(--accent);
+    opacity: 0.4;
+}
+
+/* ── 6. .reveal Class (GSAP Entry Point) ──────────────────────────────── */
+
+/*
+ * Elements with .reveal start hidden. GSAP (in later phases) will animate
+ * them into view via ScrollTrigger. The class provides the initial state
+ * so there's no flash of styled content before JS hydrates.
+ */
+
+.reveal {
+    opacity: 0;
+    transform: translateY(60px);
+    will-change: opacity, transform;
+}
+
+/* Stagger-friendly children */
+.reveal-child {
+    opacity: 0;
+    transform: translateY(40px);
+    will-change: opacity, transform;
+}
+
+/* ── 7. Film-Grain Noise Overlay ──────────────────────────────────────── */
+
+/*
+ * Full-viewport pseudo-element with an SVG turbulence noise texture.
+ * Fixed behind everything, pointer-events disabled so it never interferes
+ * with scrolling or interaction. Animates subtly to feel alive.
+ */
+
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+    pointer-events: none;
+    opacity: 0.035;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 300px 300px;
+    animation: grain-drift 8s steps(10) infinite;
+}
+
+@keyframes grain-drift {
+    0%,
+    100% {
+        transform: translate(0, 0);
+    }
+    10% {
+        transform: translate(-5%, -10%);
+    }
+    20% {
+        transform: translate(-15%, 5%);
+    }
+    30% {
+        transform: translate(7%, -25%);
+    }
+    40% {
+        transform: translate(-5%, 25%);
+    }
+    50% {
+        transform: translate(-15%, 10%);
+    }
+    60% {
+        transform: translate(15%, 0%);
+    }
+    70% {
+        transform: translate(0%, 15%);
+    }
+    80% {
+        transform: translate(3%, 35%);
+    }
+    90% {
+        transform: translate(-10%, 10%);
+    }
+}
+
+/* ── 8. Utility Helpers ───────────────────────────────────────────────── */
+
+/* Gold accent text */
+.text-accent {
+    color: var(--accent);
+}
+
+/* Muted body text */
+.text-muted {
+    color: var(--text-muted);
+}
+
+/* Dim decorative text */
+.text-dim {
+    color: var(--text-dim);
+}
+
+/* Gold gradient text */
+.text-gold-gradient {
+    background: linear-gradient(
+        135deg,
+        #d4b97c 0%,
+        var(--accent) 40%,
+        #e8d5a8 60%,
+        var(--accent) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Horizontal divider with gold fade */
+.divider {
+    width: 100%;
+    height: 1px;
+    border: none;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        var(--accent-muted) 25%,
+        rgba(200, 169, 110, 0.12) 50%,
+        var(--accent-muted) 75%,
+        transparent 100%
+    );
+    margin: 0;
+}
+
+/* Glass-card utility */
+.glass-card {
+    background: rgba(13, 13, 20, 0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    transition:
+        border-color var(--duration-fast) ease,
+        box-shadow var(--duration-base) ease;
+}
+
+.glass-card:hover {
+    border-color: var(--border-hover);
+    box-shadow:
+        0 8px 40px rgba(0, 0, 0, 0.3),
+        0 0 30px var(--accent-glow);
+}
+
+/* ── 9. Responsive Guards ─────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+    :root {
+        --section-px: 6vw;
+        --section-py: 8vh;
+    }
+
+    .section {
+        min-height: auto;
+        padding: 12vh var(--section-px);
+    }
+
+    .section__label {
+        font-size: 0.625rem;
+        margin-bottom: 2rem;
+    }
+
+    /* Reduce glass-card blur on mobile for perf */
+    .glass-card {
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+}
+
+@media (max-width: 480px) {
+    :root {
+        --section-px: 5vw;
+        --section-py: 6vh;
+    }
+
+    .section {
+        padding: 10vh var(--section-px);
+    }
+
+    /* Tighter section borders on small screens */
+    .section + .section::before {
+        left: var(--section-px);
+        right: var(--section-px);
+    }
+}
+
+/* ── 10. Prefers-Reduced-Motion ───────────────────────────────────────── */
+
+/*
+ * When the user has enabled "reduce motion" in their OS settings,
+ * disable ALL transitions, animations, and GSAP-related will-change
+ * hints globally. Individual components also check this in JS via
+ * window.matchMedia('(prefers-reduced-motion: reduce)') to skip
+ * GSAP timeline/ScrollTrigger setup entirely.
+ */
+
+@media (prefers-reduced-motion: reduce) {
+    /* Kill smooth scrolling — browser snaps instantly */
+    html {
+        scroll-behavior: auto;
+    }
+
+    /* Disable all CSS transitions and animations globally */
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    /* Remove will-change hints (saves compositor memory) */
+    .reveal,
+    .reveal-child {
+        will-change: auto;
+    }
+
+    /* Make .reveal elements visible immediately (GSAP won't run) */
+    .reveal {
+        opacity: 1;
+        transform: none;
+    }
+
+    .reveal-child {
+        opacity: 1;
+        transform: none;
+    }
+
+    /* Stop the film-grain noise animation */
+    body::after {
+        animation: none;
+        opacity: 0.02;
+    }
+
+    /* Disable glass-card hover glow */
+    .glass-card:hover {
+        box-shadow: none;
+    }
+
+    /* Gold gradient text: fall back to solid accent color
+     (gradient + clip can cause perf issues in some contexts) */
+    .text-gold-gradient {
+        background: none;
+        -webkit-background-clip: unset;
+        background-clip: unset;
+        -webkit-text-fill-color: var(--accent);
+        color: var(--accent);
+    }
+}
