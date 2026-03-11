@@ -1,13 +1,13 @@
 {
-  "name": "Your Name",
+  "name": "Shresth Kumar",
   "title": "Full-Stack Developer",
   "tagline": "Building elegant solutions to complex problems",
   "about": "Passionate developer with expertise in modern web technologies. I love crafting performant, accessible, and visually polished applications that make a real impact.",
   "avatar": "",
   "social": {
-    "github": "https://github.com/yourusername",
-    "linkedin": "https://linkedin.com/in/yourusername",
-    "email": "you@example.com"
+    "github": "https://github.com/shresthchauhan431",
+    "linkedin": "https://www.linkedin.com/in/shresthchauhan/",
+    "email": "chauhanshresth776@gmail.com"
   },
   "skills": [
     { "id": 1, "name": "React", "level": 90 },
@@ -15,7 +15,11 @@
     { "id": 3, "name": "TypeScript", "level": 80 },
     { "id": 4, "name": "Node.js", "level": 75 },
     { "id": 5, "name": "Tailwind CSS", "level": 90 },
-    { "id": 6, "name": "Python", "level": 70 }
+    { "id": 6, "name": "Python", "level": 60 },
+    { "id": 7, "name": "Java", "level": 90 },
+    { "id": 8, "name": "Spring Boot", "level": 50 },
+    { "id": 9, "name": "C++", "level": 80 },
+    { "id": 10, "name": "C", "level": 50 }
   ],
   "projects": [
     {
