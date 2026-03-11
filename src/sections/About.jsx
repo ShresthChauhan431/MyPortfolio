@@ -2,7 +2,6 @@ import { useRef, useMemo } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import EditableText from "../components/EditableText";
 import { usePortfolio } from "../context/usePortfolio";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -144,15 +143,12 @@ function About() {
           <span className="section__label">About</span>
 
           {/* Bio */}
-          <EditableText path="about" as="p" multiline className="about__bio">
-            {data.about}
-          </EditableText>
+          <p className="about__bio">{data.about}</p>
 
           {/* Social links */}
           <nav className="about__links" aria-label="Social links">
             {data.social.github && (
               <AboutSocialLink
-                path="social.github"
                 href={data.social.github}
                 icon={<GitHubIcon />}
                 label="GitHub"
@@ -160,7 +156,6 @@ function About() {
             )}
             {data.social.linkedin && (
               <AboutSocialLink
-                path="social.linkedin"
                 href={data.social.linkedin}
                 icon={<LinkedInIcon />}
                 label="LinkedIn"
@@ -168,7 +163,6 @@ function About() {
             )}
             {data.social.email && (
               <AboutSocialLink
-                path="social.email"
                 href={`mailto:${data.social.email}`}
                 icon={<EmailIcon />}
                 label={data.social.email}
@@ -425,26 +419,19 @@ function About() {
 
 /* ── Social link sub-component ──────────────────────────────── */
 
-function AboutSocialLink({ path, href, icon, label }) {
+function AboutSocialLink({ href, icon, label }) {
   const isMail = href.startsWith("mailto:");
 
   return (
-    <EditableText
-      path={path}
-      as="span"
-      style={{ display: "inline-flex", width: "fit-content" }}
+    <a
+      href={href}
+      target={isMail ? undefined : "_blank"}
+      rel={isMail ? undefined : "noreferrer"}
+      className="about__social-link"
     >
-      <a
-        href={href}
-        target={isMail ? undefined : "_blank"}
-        rel={isMail ? undefined : "noreferrer"}
-        className="about__social-link"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <span className="about__social-icon">{icon}</span>
-        <span>{label}</span>
-      </a>
-    </EditableText>
+      <span className="about__social-icon">{icon}</span>
+      <span>{label}</span>
+    </a>
   );
 }
 

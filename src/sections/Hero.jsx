@@ -2,7 +2,6 @@ import { useRef, useMemo } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import EditableText from "../components/EditableText";
 import { usePortfolio } from "../context/usePortfolio";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -275,9 +274,7 @@ function Hero({ ready = true }) {
 
         {/* ── Name (per-word stagger) ────────────────────── */}
         <div ref={nameRef} style={{ overflow: "hidden", padding: "0.1em 0" }}>
-          <EditableText
-            path="name"
-            as="h1"
+          <h1
             style={{
               fontFamily: "var(--font-display)",
               fontSize: "clamp(2.8rem, 8vw, 7.5rem)",
@@ -303,14 +300,12 @@ function Hero({ ready = true }) {
                 {word}
               </span>
             ))}
-          </EditableText>
+          </h1>
         </div>
 
         {/* ── Title (italic gold gradient) ───────────────── */}
         <div ref={titleRef} style={{ marginTop: "0.75rem" }}>
-          <EditableText
-            path="title"
-            as="p"
+          <p
             className="text-gold-gradient"
             style={{
               fontFamily: "var(--font-display)",
@@ -322,14 +317,12 @@ function Hero({ ready = true }) {
             }}
           >
             {data.title}
-          </EditableText>
+          </p>
         </div>
 
         {/* ── Tagline ────────────────────────────────────── */}
         <div ref={taglineRef} style={{ marginTop: "1.5rem" }}>
-          <EditableText
-            path="tagline"
-            as="p"
+          <p
             style={{
               fontFamily: "var(--font-body)",
               fontSize: "clamp(0.875rem, 1.4vw, 1.05rem)",
@@ -340,7 +333,7 @@ function Hero({ ready = true }) {
             }}
           >
             {data.tagline}
-          </EditableText>
+          </p>
         </div>
 
         {/* ── Social links row ───────────────────────────── */}
@@ -354,25 +347,13 @@ function Hero({ ready = true }) {
           }}
         >
           {data.social.github && (
-            <SocialLink
-              path="social.github"
-              href={data.social.github}
-              label="GitHub"
-            />
+            <SocialLink href={data.social.github} label="GitHub" />
           )}
           {data.social.linkedin && (
-            <SocialLink
-              path="social.linkedin"
-              href={data.social.linkedin}
-              label="LinkedIn"
-            />
+            <SocialLink href={data.social.linkedin} label="LinkedIn" />
           )}
           {data.social.email && (
-            <SocialLink
-              path="social.email"
-              href={`mailto:${data.social.email}`}
-              label="Email"
-            />
+            <SocialLink href={`mailto:${data.social.email}`} label="Email" />
           )}
         </div>
       </div>
@@ -448,11 +429,9 @@ function Hero({ ready = true }) {
 }
 
 /* ── Tiny helper for repeated social link pattern ────────── */
-function SocialLink({ path, href, label }) {
+function SocialLink({ href, label }) {
   return (
-    <EditableText
-      path={path}
-      as="span"
+    <span
       style={{
         fontFamily: "var(--font-body)",
         fontSize: "0.6875rem",
@@ -465,7 +444,6 @@ function SocialLink({ path, href, label }) {
         href={href}
         target={href.startsWith("mailto:") ? undefined : "_blank"}
         rel={href.startsWith("mailto:") ? undefined : "noreferrer"}
-        onClick={(e) => e.stopPropagation()}
         style={{
           color: "var(--text-dim)",
           textDecoration: "none",
@@ -481,7 +459,7 @@ function SocialLink({ path, href, label }) {
       >
         {label}
       </a>
-    </EditableText>
+    </span>
   );
 }
 

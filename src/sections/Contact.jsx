@@ -2,7 +2,6 @@ import { useRef, useState, useCallback } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import EditableText from "../components/EditableText";
 import { usePortfolio } from "../context/usePortfolio";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -674,14 +673,9 @@ function Contact() {
           ref={emailRef}
           style={{ marginTop: "2.5rem", marginBottom: "2rem" }}
         >
-          <EditableText
-            path="social.email"
-            as="div"
-            style={{ display: "inline-block" }}
-          >
+          <div style={{ display: "inline-block" }}>
             <a
               href={`mailto:${data.social.email}`}
-              onClick={(e) => e.stopPropagation()}
               className="contact-email-link"
               style={{
                 fontFamily: "var(--font-display)",
@@ -728,7 +722,7 @@ function Contact() {
                 }}
               />
             </a>
-          </EditableText>
+          </div>
         </div>
 
         {/* Social icon buttons */}
@@ -851,16 +845,14 @@ function Contact() {
           }}
         >
           &copy; {currentYear}{" "}
-          <EditableText
-            path="name"
-            as="span"
+          <span
             style={{
               color: "var(--text-muted)",
               fontWeight: 500,
             }}
           >
             {data.name}
-          </EditableText>
+          </span>
           . All rights reserved.
         </p>
 

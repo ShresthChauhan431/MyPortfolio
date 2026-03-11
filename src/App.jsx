@@ -12,7 +12,6 @@ import CustomCursor from "./components/CustomCursor";
 import ScrollProgress from "./components/ScrollProgress";
 import SectionIndicator from "./components/SectionIndicator";
 import LoadingScreen from "./components/LoadingScreen";
-import EditPanel from "./components/EditPanel";
 import { usePortfolio } from "./context/usePortfolio";
 
 function App() {
@@ -79,9 +78,6 @@ function App() {
         <Experience />
         <Contact />
       </main>
-
-      {/* Edit-mode overlay — always mounted, visibility controlled by context */}
-      <EditPanel />
     </>
   );
 }

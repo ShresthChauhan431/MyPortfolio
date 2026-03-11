@@ -19,7 +19,6 @@ const HOVER_SELECTORS = [
   "input[type='submit']",
   ".nav-hoverable",
   ".glass-card",
-  ".editable-text--active",
 ].join(", ");
 
 function CustomCursor() {
